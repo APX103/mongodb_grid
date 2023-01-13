@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title} config page
+
+  div.text-center
+    form(method="POST" action="/users/update")
+      table(class="chart")
+        tr(class="chart")
+          td(style="width:20px")
+          each vl in repos
+            td(class="chart")= vl 
+        each vl in permissions
+          tr(class="chart")
+            td= vl
+            each val in repos
+              td(class="in_chart")
+                var _name = val+"="+vl
+                if permission_metrics.get(val).get(vl)
+                  fieldset
+                    div
+                      input(type="radio" name=val+"="+vl value=true checked)
+                      a yes
+                    div
+                      input(type="radio" name=val+"="+vl value=false)
+                      a no
+                else
+                  fieldset
+                    div
+                      input(type="radio" name=val+"="+vl value=true)
+                      a yes
+                    div
+                      input(type="radio" name=val+"="+vl value=false checked)
+                      a no 
+                
+      button(type="submit") update
