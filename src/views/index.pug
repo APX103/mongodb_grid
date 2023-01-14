@@ -5,33 +5,55 @@ block content
   p Welcome to #{title} config page
 
   div.text-center
-    form(method="POST" action="/users/update")
-      table(class="chart")
-        tr(class="chart")
+    form(method="POST" action="/users/apply_update")
+      table(class="table")
+        tr
           td(style="width:20px")
           each vl in repos
-            td(class="chart")= vl 
+            td= vl 
         each vl in permissions
-          tr(class="chart")
+          tr
             td= vl
             each val in repos
-              td(class="in_chart")
-                var _name = val+"="+vl
+              td
                 if permission_metrics.get(val).get(vl)
                   fieldset
                     div
-                      input(type="radio" name=val+"="+vl value=true checked)
+                      input(type="radio" name=val+"="+vl id=val+"="+vl+"1" value=true checked)
                       a yes
                     div
-                      input(type="radio" name=val+"="+vl value=false)
+                      input(type="radio" name=val+"="+vl id=val+"="+vl+"2" value=false)
                       a no
                 else
                   fieldset
                     div
-                      input(type="radio" name=val+"="+vl value=true)
+                      input(type="radio" name=val+"="+vl id=val+"="+vl+"1" value=true)
                       a yes
                     div
-                      input(type="radio" name=val+"="+vl value=false checked)
+                      input(type="radio" name=val+"="+vl id=val+"="+vl+"2" value=false checked)
                       a no 
                 
-      button(type="submit") update
+      button(type="submit" class="btn btn-success") update
+  h2 The following are all dangerous operations
+  div
+    p
+    form(method="POST" action="/users/add_new_group")
+      input(type="text" name="repo_name" style="margin-right:10px" required placeholder="repo_name")
+      input(type="text" name="group_name" style="margin-right:10px" required placeholder="group_name")
+      input(type="text" name="repo_fullname" style="margin-right:10px" required placeholder="repo_fullname")
+      button(type="submit" class="btn btn-primary") add_group
+  div
+    p
+    form(method="POST" action="/users/add_new_permission")
+      input(type="text" name="new_permission" style="margin-right:10px" required placeholder="new_permission")
+      button(type="submit" class="btn btn-primary") add_permission
+  div
+    p
+    form(method="POST" action="/users/delete_a_group")
+      input(type="text" name="repo_name" style="margin-right:10px" required placeholder="repo_name")
+      button(type="submit" class="btn btn-danger") delete_group
+  div
+    p
+    form(method="POST" action="/users/delete_a_permission")
+      input(type="text" name="permission" style="margin-right:10px" required placeholder="permission")
+      button(type="submit" class="btn btn-danger") delete_permission
