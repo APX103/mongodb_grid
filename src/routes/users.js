@@ -38,8 +38,8 @@ router.post('/add_new_group', async function (ctx, next) {
   let collection = db.collection(co)
   let results = await collection.find({}).toArray()
   let _permissions = []
-  for(let k in results[0]){
-    if(results[0][k] === 'on' || results[0][k] === 'off'){
+  for(let k in results){
+    if(results[k] === 'on' || results[k] === 'off'){
       _permissions.push(k)
     }
   }
@@ -56,14 +56,21 @@ router.post('/add_new_group', async function (ctx, next) {
 router.post('/add_new_permission', async function (ctx, next) {
   console.log('add_new_permission')
   console.log(ctx.request.body)
+  let new_permission = String(ctx.request.body.new_permission)
+  console.log(new_permission)
   db = client.db("lark_bot")
   let _collections = await db.collections()
   for(let j in _collections){
     let co = _collections[j].s.namespace.collection
     let collection = db.collection(co)
-    // await collection.insertOne(group_info)
+    let p = await collection.find({}).toArray()
+    p = p[0]
+    let _id = p._id
+    delete p._id
+    eval('p.' + new_permission + ' = "off"')
+    await collection.deleteOne({_id: _id})
+    await collection.insertOne(p)
   }
-
   await ctx.redirect('/')
 })
 
@@ -78,6 +85,21 @@ router.post('/delete_a_group', async function (ctx, next) {
 router.post('/delete_a_permission', async function (ctx, next) {
   console.log('delete_a_permission')
   console.log(ctx.request.body)
+  let delete_permission = String(ctx.request.body.permission)
+  console.log(delete_permission)
+  db = client.db("lark_bot")
+  let _collections = await db.collections()
+  for(let j in _collections){
+    let co = _collections[j].s.namespace.collection
+    let collection = db.collection(co)
+    let p = await collection.find({}).toArray()
+    p = p[0]
+    let _id = p._id
+    delete p._id
+    eval('delete p.' + delete_permission)
+    await collection.deleteOne({_id: _id})
+    await collection.insertOne(p)
+  }
   await ctx.redirect('/')
 })
 
