@@ -79,6 +79,13 @@ Now you know the basics of querying data stored in a MongoDB database from a Nod
 
 1. permissions not match
 
+## deploy
+
+``` sh
+docker build -t mongodb_grid:v1 . 
+docker run --rm --net=host --name=mongodb_grid mongodb_grid:v1
+```
+
 ## some idea
 
 1. Use pug templete

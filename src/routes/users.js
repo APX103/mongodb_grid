@@ -1,9 +1,10 @@
 const router = require('koa-router')()
 const { MongoClient } = require('mongodb')
+const { mongodb_url } = require('../config/constant')
 
-const client = new MongoClient("mongodb://127.0.0.1:27017")
+const client = new MongoClient(mongodb_url)
 
-router.prefix('/users')
+router.prefix('/user')
 
 router.post('/apply_update', async function (ctx, next) {
   // console.log(ctx.request.body)

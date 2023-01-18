@@ -1,8 +1,8 @@
 const router = require('koa-router')()
 const { MongoClient } = require('mongodb')
+const { mongodb_url } = require('../config/constant')
 
-
-const client = new MongoClient("mongodb://127.0.0.1:27017")
+const client = new MongoClient(mongodb_url)
 
 router.get('/', async (ctx, next) => {
   await client.connect()
