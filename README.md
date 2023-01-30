@@ -92,6 +92,5 @@ docker run --rm --net=host --name=mongodb_grid mongodb_grid:v1
 
 ## TODO
 
-1. make group name editable
-2. update ui
-3. add vue into pug
+1. update ui
+2. add vue into pug
