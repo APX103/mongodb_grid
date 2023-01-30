@@ -11,10 +11,13 @@ router.get('/', async (ctx, next) => {
   let _collections = await db.collections()
   let collections = []
   let permissions = []
+  let group_info = ['repo_fullname', 'lark_group']
   let permission_metrics = new Map()
+  let group_info_map = new Map()
   for(let j in _collections){
     let co = _collections[j].s.namespace.collection
     permission_metrics.set(eval("co"), new Map())
+    group_info_map.set(eval("co"), new Map())
     collections.push(co)
     let collection = db.collection(co)
     let results = await collection.find({}).toArray()
@@ -30,6 +33,9 @@ router.get('/', async (ctx, next) => {
         }
         permission_metrics.get(co).set(k, _status)
       }
+      if(k === "repo_fullname" || k === "lark_group"){
+        group_info_map.get(co).set(k, results[0][k])
+      }
     }
     // console.log(_permissions)
     if ((permissions.sort().toString() !== _permissions.sort().toString()) && p_flag === true){
@@ -42,11 +48,14 @@ router.get('/', async (ctx, next) => {
 
   // console.log(collections)
   // console.log(permission_metrics)
+  // console.log(group_info_map)
   await ctx.render('index', {
     title: "lark_bot permission",
     repos: collections,
     permissions: permissions,
-    permission_metrics: permission_metrics
+    permission_metrics: permission_metrics,
+    group_info: group_info,
+    group_info_map: group_info_map
   })
   await client.close()
 })

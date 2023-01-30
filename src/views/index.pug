@@ -34,6 +34,22 @@ block content
                       a no 
                 
       button(type="submit" class="btn btn-success") update
+  h2 group_info update
+  div.text-center
+    form(method="POST" action="/users/update_group_info")
+      table(class="table")
+        tr
+          td(style="width:20px")
+          each vl in repos
+            td= vl 
+        each vl in group_info
+          tr
+            td= vl
+            each val in repos
+              td
+                input(type="text" name=val+"="+vl id=val+"="+vl value=group_info_map.get(val).get(vl))
+                
+      button(type="submit" class="btn btn-success") update group info
   h2 The following are all dangerous operations
   div
     p

@@ -4,7 +4,7 @@ const { mongodb_url } = require('../config/constant')
 
 const client = new MongoClient(mongodb_url)
 
-router.prefix('/user')
+router.prefix('/users')
 
 router.post('/apply_update', async function (ctx, next) {
   // console.log(ctx.request.body)
@@ -19,6 +19,20 @@ router.post('/apply_update', async function (ctx, next) {
       _status = "off"
     }
     eval('param.' + func + '="' + _status + '"')
+    await collection.updateOne({ "repo": repo }, {$set:param})
+  }
+  await ctx.redirect('/')
+})
+
+router.post('/update_group_info', async function (ctx, next) {
+  // console.log(ctx.request.body)
+  db = client.db("lark_bot")
+  for(let i in ctx.request.body){
+    let repo = i.split('=')[0]
+    let func = i.split('=')[1]
+    let collection = await db.collection(repo)
+    let param = {}
+    eval('param.' + func + '="' + ctx.request.body[i] + '"')
     await collection.updateOne({ "repo": repo }, {$set:param})
   }
   await ctx.redirect('/')
